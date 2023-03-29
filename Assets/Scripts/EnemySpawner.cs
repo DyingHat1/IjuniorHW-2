@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemy;
+    [SerializeField] private EnemyMovement _enemy;
     [SerializeField] private int _enemiesCount;
 
     private Transform[] _spawnPoints;
-    private int _currentPointIndex;
-    private int _previousPointIndex;
-    private float _secondsBetweenEnemySpawn;
+    private int _currentPointIndex = -1;
+    private int _previousPointIndex = -1;
+    private float _secondsBetweenEnemySpawn = 2f;
+    private WaitForSeconds _waitForSeconds;
+
 
     private void Start()
     {
         _spawnPoints = new Transform[transform.childCount];
-        _previousPointIndex = -1;
-        _currentPointIndex = -1;
-        _secondsBetweenEnemySpawn = 2f;
+        _waitForSeconds = new WaitForSeconds(_secondsBetweenEnemySpawn);
 
         for (int i = 0; i < transform.childCount; i++)
         {
             _spawnPoints[i] = transform.GetChild(i);
         }
 
-        var _createEnemyObject = StartCoroutine(CreateEnemyObject());
+        StartCoroutine(CreateEnemyObject());
     }
 
-    IEnumerator CreateEnemyObject()
+    private IEnumerator CreateEnemyObject()
     {
         for(int i = 0;i < _enemiesCount; i++)
         {
@@ -38,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
 
             _previousPointIndex = _currentPointIndex;
             Instantiate(_enemy, _spawnPoints[_currentPointIndex]);
-            yield return new WaitForSeconds(_secondsBetweenEnemySpawn);
+            yield return _waitForSeconds;
         }
     }
 }
