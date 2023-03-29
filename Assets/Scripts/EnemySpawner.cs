@@ -13,7 +13,6 @@ public class EnemySpawner : MonoBehaviour
     private float _secondsBetweenEnemySpawn = 2f;
     private WaitForSeconds _waitForSeconds;
 
-
     private void Start()
     {
         _spawnPoints = new Transform[transform.childCount];
